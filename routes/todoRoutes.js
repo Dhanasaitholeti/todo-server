@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const protect = require('../middlewares/Authentication')
 const {
     addTodo,
     getTodo
@@ -6,10 +7,10 @@ const {
 
 
 
-router.get('/get-todo',getTodo)
+router.get('/get-todo', protect , getTodo)
 
 
-router.post('/add-todo',addTodo)
+router.post('/add-todo', protect , addTodo)
 
 
 module.exports = router;

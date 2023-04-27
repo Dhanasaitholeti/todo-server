@@ -5,13 +5,12 @@ const tokenGenerator = require('../controllers/tokenGenerator')
 const userLogin = async (req,res) => {
     const {userEmail,password} = req.body;
     try {
-
         const userEmaildata = await userModel.findOne({ Email: userEmail})
         if(!userEmaildata){
             res.status(400).json({message: 'please try to register first'});
         }
         else if(userEmaildata){
-            const passwordcheck = await bcrypt.compare(password, userEmaildata.passwd)
+            const passwordcheck = await bcrypt.compare(password, userEmaildata.password)
 
             if(!passwordcheck){
                 res.status(400).json({message:"check the password"});
@@ -26,13 +25,13 @@ const userLogin = async (req,res) => {
         }        
     } 
     catch (error) {
-        console.log(error)
+        res.status(400).json({message:"unable to login"})
     }
 }
 
 const userSignup = async (req,res) => {
-   const {Name,Email,passwd,MasterPassword} = req.body;
-
+   const {Name,Email,passwd} = req.body
+   console.log(Name,Email,passwd)   
    const salt = await bcrypt.genSalt(10);
 
    const userEmaildata = await userModel.find({Email});
@@ -41,15 +40,14 @@ const userSignup = async (req,res) => {
     res.status(400).json({message:"Email already registered"});
    }
 
-   const hashedpasswd = await bcrypt.hash(passwd,salt); 
-   const hashedMPasswd = await bcrypt.hash(MasterPassword,salt);  
+   const hashedpasswd = await bcrypt.hash(passwd,salt)
+
 
    try {
         const user = await  userModel.create({
             Name,
             Email,
-            passwd:hashedpasswd,
-            MasterPassword:hashedMPasswd
+            password:hashedpasswd
         })
         res.status(200).json({user})
    } catch (error) {
