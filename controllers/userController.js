@@ -15,6 +15,7 @@ const userLogin = async (req,res) => {
             if(!passwordcheck){
                 res.status(400).json({message:"check the password"});
             }
+            
             else{
                 const token = await tokenGenerator({
                     id: userEmaildata._id,
@@ -25,13 +26,13 @@ const userLogin = async (req,res) => {
         }        
     } 
     catch (error) {
-        res.status(400).json({message:"unable to login"})
+        res.status(401).json({message:"unable to login"})
     }
 }
 
 const userSignup = async (req,res) => {
-   const {Name,Email,passwd} = req.body
-   console.log(Name,Email,passwd)   
+   const {Name,Email,passwd} = req.body 
+   
    const salt = await bcrypt.genSalt(10);
 
    const userEmaildata = await userModel.find({Email});
@@ -50,6 +51,7 @@ const userSignup = async (req,res) => {
             password:hashedpasswd
         })
         res.status(200).json({user})
+
    } catch (error) {
         res.status(400).json({"message":"unable to create new user"})
    }

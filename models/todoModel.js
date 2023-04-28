@@ -29,8 +29,7 @@ const todoSchema = new schema({
         default:"Pending"
     },
     dueDate:{
-        type:String,
-        default:"Hello",
+        type:Date,
         required:true
     }
 },

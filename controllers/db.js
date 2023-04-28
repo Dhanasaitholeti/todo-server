@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const url = "mongodb://localhost:27017/todos";
+const url = `mongodb+srv://saribaby1999:tEZkbGCr9UrNpIzd@internass.p6o5y8k.mongodb.net/TODOS?retryWrites=true&w=majority`;
 
 
 const connecttodb = async () => {
