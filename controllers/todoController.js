@@ -33,7 +33,41 @@ const getTodo = async (req, res) => {
     }
 }
 
+const deleteTodo = async (req,res) =>{
+    const id = req.params.id;
+    console.log("here")
+    try {
+        await todoModel.findByIdAndDelete(id)
+        res.status(200).json({message: 'deleted succesfully'})
+    } catch (error) {
+        console.log(error)
+        res.status(400).json({message: error.message});
+
+    }
+}
+
+const updateTodo = async (req,res) =>{
+    const id = req.params.id;
+    const {priority,todo,category,duedate,status} = req.body;
+
+    try {
+        const updatedData = await todoModel.findByIdAndUpdate(id,{
+            priority,
+            Todo:todo,
+            category,
+            status,
+            dueDate:duedate
+        })
+        res.status(200).json({data:updatedData})
+        
+    } catch (error) {
+        res.status(400).json({message: error.message});
+    }
+}
+
 module.exports = {
     addTodo,
-    getTodo
+    getTodo,
+    updateTodo,
+    deleteTodo
 }
