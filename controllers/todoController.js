@@ -34,11 +34,13 @@ const getTodo = async (req, res) => {
 }
 
 const deleteTodo = async (req,res) =>{
+    const user_id = req.user;
     const id = req.params.id;
     console.log("here")
     try {
         await todoModel.findByIdAndDelete(id)
-        res.status(200).json({message: 'deleted succesfully'})
+        const updateddata = await todoModel.find({Belong_user:user_id})
+        res.status(200).json({updateddata})
     } catch (error) {
         console.log(error)
         res.status(400).json({message: error.message});
@@ -47,18 +49,20 @@ const deleteTodo = async (req,res) =>{
 }
 
 const updateTodo = async (req,res) =>{
+    const user_id = req.user;
     const id = req.params.id;
     const {priority,todo,category,duedate,status} = req.body;
 
     try {
-        const updatedData = await todoModel.findByIdAndUpdate(id,{
+        await todoModel.findByIdAndUpdate(id,{
             priority,
             Todo:todo,
             category,
             status,
             dueDate:duedate
         })
-        res.status(200).json({data:updatedData})
+        const updateddata = await todoModel.find({Belong_user:user_id})
+        res.status(200).json({updateddata})
         
     } catch (error) {
         res.status(400).json({message: error.message});
